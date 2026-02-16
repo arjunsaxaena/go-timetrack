@@ -1,10 +1,13 @@
 /*
-Copyright © 2026 NAME HERE arjunsaxena04@gmail.com
+	Copyright © 2026 ARJUN SAXENA arjunsaxena04@gmail.com
 */
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"time"
+	"tt/internal/store"
 
 	"github.com/spf13/cobra"
 )
@@ -14,9 +17,24 @@ var stopCmd = &cobra.Command{
 	Use:   "stop [task]",
 	Short: "Stop tracking a task",
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		task := args[0]
-		fmt.Printf("Stopped task: %s\n", task)
+
+		st, err := store.Open()
+		if err != nil {
+			return err
+		}
+
+		duration, err := st.StopTask(task)
+		if err != nil {
+			if errors.Is(err, store.ErrTaskNotActive) {
+				return fmt.Errorf("task %q is not active", task)
+			}
+			return fmt.Errorf("could not stop task: %w", err)
+		}
+
+		fmt.Printf("Stopped task: %s (time spent: %s)\n", task, duration.Round(time.Second))
+		return nil
 	},
 }
 

@@ -1,10 +1,12 @@
 /*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
+Copyright © 2026 ARJUN SAXENA arjunsaxena04@gmail.com
 */
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"tt/internal/store"
 
 	"github.com/spf13/cobra"
 )
@@ -14,9 +16,23 @@ var startCmd = &cobra.Command{
 	Use:   "start [task]",
 	Short: "Start tracking a task",
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		task := args[0]
+
+		st, err := store.Open()
+		if err != nil {
+			return err
+		}
+
+		if err := st.StartTask(task); err != nil {
+			if errors.Is(err, store.ErrTaskAlreadyActive) {
+				return fmt.Errorf("task %q is already active", task)
+			}
+			return fmt.Errorf("could not start task: %w", err)
+		}
+
 		fmt.Printf("Started task: %s\n", task)
+		return nil
 	},
 }
 
