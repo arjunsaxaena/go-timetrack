@@ -64,24 +64,20 @@ var logsCmd = &cobra.Command{
 		}
 
 		if len(logs) == 0 {
-			fmt.Println("No logs found.")
+			printEmpty("No logs found.")
 			return nil
 		}
 
-		for _, entry := range logs {
+		printSection("Task Logs")
+		for i, entry := range logs {
 			duration := time.Duration(entry.DurationSeconds) * time.Second
-			hours := int(duration.Hours())
-			minutes := int(duration.Minutes()) % 60
-
-			fmt.Printf(
-				"#%d %s | %s -> %s | %dh %dm\n",
-				entry.ID,
-				entry.TaskName,
-				entry.StartTime.Local().Format("Jan 2 3:04 PM"),
-				entry.EndTime.Local().Format("Jan 2 3:04 PM"),
-				hours,
-				minutes,
-			)
+			fmt.Printf("#%d %s\n", entry.ID, entry.TaskName)
+			printField("start", formatDateTime(entry.StartTime))
+			printField("end", formatDateTime(entry.EndTime))
+			printField("total", formatDuration(duration))
+			if i < len(logs)-1 {
+				fmt.Println()
+			}
 		}
 
 		return nil

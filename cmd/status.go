@@ -27,26 +27,19 @@ var statusCmd = &cobra.Command{
 		}
 
 		if len(tasks) == 0 {
-			fmt.Println("No active tasks.")
+			printEmpty("No active tasks.")
 			return nil
 		}
 
-		for _, task := range tasks {
+		printSection("Active Tasks")
+		for i, task := range tasks {
 			running := time.Since(task.StartTime)
-			if running < 0 {
-				running = 0
+			fmt.Printf("%d) %s\n", i+1, task.Name)
+			printField("started", formatClock(task.StartTime))
+			printField("running", formatDuration(running))
+			if i < len(tasks)-1 {
+				fmt.Println()
 			}
-
-			hours := int(running.Hours())
-			minutes := int(running.Minutes()) % 60
-
-			fmt.Printf(
-				"%s - started at %s (running for %dh %dm)\n",
-				task.Name,
-				task.StartTime.Local().Format("3:04 PM"),
-				hours,
-				minutes,
-			)
 		}
 		return nil
 	},

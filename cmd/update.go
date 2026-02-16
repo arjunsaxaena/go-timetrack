@@ -78,13 +78,10 @@ var updateCmd = &cobra.Command{
 		}
 
 		duration := time.Duration(entry.DurationSeconds) * time.Second
-		hours := int(duration.Hours())
-		minutes := int(duration.Minutes()) % 60
-
-		fmt.Printf("Updated log #%d (%s)\n", entry.ID, entry.TaskName)
-		fmt.Printf("  start: %s\n", entry.StartTime.Local().Format("Jan 2 3:04 PM"))
-		fmt.Printf("  end:   %s\n", entry.EndTime.Local().Format("Jan 2 3:04 PM"))
-		fmt.Printf("  total: %dh %dm\n", hours, minutes)
+		printSuccess("Updated log #%d (%s)", entry.ID, entry.TaskName)
+		printField("start", formatDateTime(entry.StartTime))
+		printField("end", formatDateTime(entry.EndTime))
+		printField("total", formatDuration(duration))
 		return nil
 	},
 }

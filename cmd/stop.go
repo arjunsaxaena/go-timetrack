@@ -1,12 +1,11 @@
 /*
-	Copyright © 2026 ARJUN SAXENA arjunsaxena04@gmail.com
+Copyright © 2026 ARJUN SAXENA arjunsaxena04@gmail.com
 */
 package cmd
 
 import (
 	"errors"
 	"fmt"
-	"time"
 	"tt/internal/store"
 
 	"github.com/spf13/cobra"
@@ -33,7 +32,8 @@ var stopCmd = &cobra.Command{
 			return fmt.Errorf("could not stop task: %w", err)
 		}
 
-		fmt.Printf("Stopped task: %s (time spent: %s)\n", task, duration.Round(time.Second))
+		printSuccess("Stopped task %q", task)
+		printField("spent", formatDuration(duration))
 		return nil
 	},
 }

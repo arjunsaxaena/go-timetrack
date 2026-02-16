@@ -31,7 +31,8 @@ var startCmd = &cobra.Command{
 			return fmt.Errorf("could not start task: %w", err)
 		}
 
-		fmt.Printf("Started task: %s\n", task)
+		printSuccess("Started task %q", task)
+		printInfo("Use %q to see active timers.", "tt status")
 		return nil
 	},
 }
