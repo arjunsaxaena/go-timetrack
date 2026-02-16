@@ -144,4 +144,17 @@ func init() {
 	deleteCmd.Flags().IntVar(&deleteDays, "days", 0, "delete logs from today - N days")
 	deleteCmd.Flags().StringVar(&deleteID, "id", "", "delete a specific log by id")
 	deleteCmd.Flags().StringVar(&deleteActive, "active", "", "delete an active task by name")
+
+	_ = deleteCmd.RegisterFlagCompletionFunc("active", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		st, err := store.Open()
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+
+		suggestions, err := st.GetActiveTaskNameSuggestions(toComplete, 20)
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+		return suggestions, cobra.ShellCompDirectiveNoFileComp
+	})
 }

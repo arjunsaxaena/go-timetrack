@@ -19,6 +19,22 @@ var stopCmd = &cobra.Command{
 	Example: `  tt stop "deep work"
   tt stop`,
 	Args:  cobra.MaximumNArgs(1),
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		if len(args) > 0 {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+
+		st, err := store.Open()
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+
+		suggestions, err := st.GetActiveTaskNameSuggestions(toComplete, 20)
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+		return suggestions, cobra.ShellCompDirectiveNoFileComp
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		st, err := store.Open()
 		if err != nil {
