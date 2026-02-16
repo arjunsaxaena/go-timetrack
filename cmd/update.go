@@ -6,7 +6,6 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 	"tt/internal/store"
@@ -26,9 +25,9 @@ var updateCmd = &cobra.Command{
 	Short: "Update a task log entry",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		id, err := strconv.ParseInt(args[0], 10, 64)
-		if err != nil || id <= 0 {
-			return fmt.Errorf("log-id must be a positive integer")
+		id := strings.TrimSpace(args[0])
+		if !store.IsValidLogID(id) {
+			return fmt.Errorf("log-id must be an 8-character alphanumeric value")
 		}
 		if updateName == "" && updateStart == "" && updateEnd == "" {
 			return fmt.Errorf("provide at least one of --name, --start, or --end")
@@ -69,7 +68,7 @@ var updateCmd = &cobra.Command{
 		entry, err := st.UpdateTaskLog(id, namePtr, startPtr, endPtr)
 		if err != nil {
 			if errors.Is(err, store.ErrLogNotFound) {
-				return fmt.Errorf("log with id %d not found", id)
+				return fmt.Errorf("log with id %s not found", id)
 			}
 			if errors.Is(err, store.ErrInvalidTimeRange) {
 				return fmt.Errorf("start time cannot be after end time")
@@ -78,7 +77,7 @@ var updateCmd = &cobra.Command{
 		}
 
 		duration := time.Duration(entry.DurationSeconds) * time.Second
-		printSuccess("Updated log #%d (%s)", entry.ID, entry.TaskName)
+		printSuccess("Updated log #%s (%s)", entry.ID, entry.TaskName)
 		printField("start", formatDateTime(entry.StartTime))
 		printField("end", formatDateTime(entry.EndTime))
 		printField("total", formatDuration(duration))

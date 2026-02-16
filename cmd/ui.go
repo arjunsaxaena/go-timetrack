@@ -47,6 +47,10 @@ func uiWarn(text string) string {
 	return uiColor("33", text)
 }
 
+func uiID(text string) string {
+	return uiColor("35", text)
+}
+
 func printSection(title string) {
 	line := strings.Repeat("-", len(title)+4)
 	fmt.Println(uiMuted(line))

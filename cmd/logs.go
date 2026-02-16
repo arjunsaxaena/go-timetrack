@@ -71,7 +71,7 @@ var logsCmd = &cobra.Command{
 		printSection("Task Logs")
 		for i, entry := range logs {
 			duration := time.Duration(entry.DurationSeconds) * time.Second
-			fmt.Printf("#%d %s\n", entry.ID, entry.TaskName)
+			fmt.Printf("# %s %s\n", uiID(entry.ID), entry.TaskName)
 			printField("start", formatDateTime(entry.StartTime))
 			printField("end", formatDateTime(entry.EndTime))
 			printField("total", formatDuration(duration))

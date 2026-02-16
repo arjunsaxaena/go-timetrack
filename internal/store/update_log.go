@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Store) UpdateTaskLog(
-	id int64,
+	id string,
 	taskName *string,
 	startTime *time.Time,
 	endTime *time.Time,

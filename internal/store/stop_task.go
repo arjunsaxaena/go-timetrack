@@ -28,9 +28,16 @@ func (s *Store) StopTask(task string) (time.Duration, error) {
 		return 0, err
 	}
 
+	logID, err := generateUniqueLogIDTx(tx, "task_log")
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
 	_, err = tx.Exec(
-		`INSERT INTO task_log (task_name, start_time, end_time, duration_seconds)
-		 VALUES (?, ?, ?, ?)`,
+		`INSERT INTO task_log (id, task_name, start_time, end_time, duration_seconds)
+		 VALUES (?, ?, ?, ?, ?)`,
+		logID,
 		task,
 		startTime,
 		endTime,

@@ -9,7 +9,7 @@ func migrate(db *sql.DB) error {
 			start_time DATETIME NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS task_log (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			id TEXT PRIMARY KEY,
 			task_name TEXT NOT NULL,
 			start_time DATETIME NOT NULL,
 			end_time DATETIME NOT NULL,

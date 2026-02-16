@@ -15,7 +15,7 @@ type ActiveTask struct {
 }
 
 type TaskLogEntry struct {
-	ID              int64
+	ID              string
 	TaskName        string
 	StartTime       time.Time
 	EndTime         time.Time
