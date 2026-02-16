@@ -15,6 +15,8 @@ import (
 var startCmd = &cobra.Command{
 	Use:   "start [task]",
 	Short: "Start tracking a task",
+	Example: `  tt start "deep work"
+  tt start "meeting"`,
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		task := args[0]

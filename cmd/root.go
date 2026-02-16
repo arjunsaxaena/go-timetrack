@@ -13,13 +13,15 @@ import (
 var rootCmd = &cobra.Command{
 	Use:          "tt",
 	Short:        "Track work time from your terminal",
-	Long:         "tt is a lightweight CLI to start, stop, inspect, and edit task time logs.",
+	Long:         "TimeTrack is a lightweight CLI to start, stop, inspect, and edit task time logs.",
 	SilenceUsage: true,
 	Example: `  tt start "project setup"
   tt status
   tt stop "project setup"
   tt logs --today
-  tt update 42 --name "setup review" --end "6:30 PM"`,
+  tt dash --month
+  tt update a1b2c3d4 --name "setup review" --end "6:30 PM"
+  tt delete --today`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

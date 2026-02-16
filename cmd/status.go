@@ -15,6 +15,7 @@ import (
 var statusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Show active tasks",
+	Example: `  tt status`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		st, err := store.Open()
 		if err != nil {

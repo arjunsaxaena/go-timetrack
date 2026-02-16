@@ -23,6 +23,9 @@ var (
 var updateCmd = &cobra.Command{
 	Use:   "update [log-id]",
 	Short: "Update a task log entry",
+	Example: `  tt update a1b2c3d4 --name "backend sync"
+  tt update a1b2c3d4 --start "2026-02-16 10:00" --end "2026-02-16 11:30"
+  tt update a1b2c3d4 --end "6:30 PM"`,
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		id := strings.TrimSpace(args[0])

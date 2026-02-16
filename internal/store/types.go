@@ -21,3 +21,8 @@ type TaskLogEntry struct {
 	EndTime         time.Time
 	DurationSeconds int
 }
+
+type TaskDurationSummary struct {
+	TaskName        string
+	DurationSeconds int
+}

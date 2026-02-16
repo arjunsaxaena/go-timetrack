@@ -21,6 +21,10 @@ var (
 var logsCmd = &cobra.Command{
 	Use:   "logs",
 	Short: "Show logged tasks",
+	Example: `  tt logs
+  tt logs --today
+  tt logs --week
+  tt logs --days 14`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		filterCount := 0
 		if logsToday {
