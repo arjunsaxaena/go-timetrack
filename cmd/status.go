@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 	"tt/internal/store"
 
 	"github.com/spf13/cobra"
@@ -31,7 +32,21 @@ var statusCmd = &cobra.Command{
 		}
 
 		for _, task := range tasks {
-			fmt.Printf("%s - started at %s\n", task.Name, task.StartTime.Local().Format("3:04 PM"))
+			running := time.Since(task.StartTime)
+			if running < 0 {
+				running = 0
+			}
+
+			hours := int(running.Hours())
+			minutes := int(running.Minutes()) % 60
+
+			fmt.Printf(
+				"%s - started at %s (running for %dh %dm)\n",
+				task.Name,
+				task.StartTime.Local().Format("3:04 PM"),
+				hours,
+				minutes,
+			)
 		}
 		return nil
 	},
