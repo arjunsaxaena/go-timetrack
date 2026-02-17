@@ -26,3 +26,9 @@ type TaskDurationSummary struct {
 	TaskName        string
 	DurationSeconds int
 }
+
+type TaskLogGroup struct {
+	TaskName        string
+	DurationSeconds int
+	SessionCount    int
+}

@@ -39,3 +39,35 @@ func (s *Store) GetTaskLogs(since *time.Time) ([]TaskLogEntry, error) {
 
 	return logs, nil
 }
+
+func (s *Store) GetTaskLogGroups(since *time.Time) ([]TaskLogGroup, error) {
+	query := `SELECT task_name, SUM(duration_seconds) AS total_seconds, COUNT(*) AS session_count FROM task_log`
+	args := []any{}
+
+	if since != nil {
+		query += ` WHERE end_time >= ?`
+		args = append(args, *since)
+	}
+
+	query += ` GROUP BY task_name ORDER BY total_seconds DESC, task_name ASC`
+
+	rows, err := s.db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var groups []TaskLogGroup
+	for rows.Next() {
+		var group TaskLogGroup
+		if err := rows.Scan(&group.TaskName, &group.DurationSeconds, &group.SessionCount); err != nil {
+			return nil, err
+		}
+		groups = append(groups, group)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return groups, nil
+}
